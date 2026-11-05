@@ -1,0 +1,6 @@
+Setup   KEYWORD1
+Update  KEYWORD1
+Blink   KEYWORD2
+Toggle  KEYWORD2
+TurnOn  KEYWORD2
+TurnOff KEYWORD2
