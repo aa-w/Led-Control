@@ -1,7 +1,7 @@
-#include "Led.h"
+#include "Led_Control.h"
 
 // Constructor
-Led::Led() : pin(0),
+Led_Control::Led_Control() : pin(0),
              State(false),
              BlinkDuty(500),
              BlinkCount(0),
@@ -11,7 +11,7 @@ Led::Led() : pin(0),
 {
 }
 
-void Led::Setup(byte AssignedPin)
+void Led_Control::Setup(byte AssignedPin)
 {
     pin = AssignedPin;
 
@@ -23,19 +23,16 @@ void Led::Setup(byte AssignedPin)
     BlinkCount = 0;
 }
 
-void Led::Toggle()
+void Led_Control::Toggle()
 {
     State = !State;
 
     digitalWrite(pin, State);
 
     LastUpdate = millis();
-
-    Serial.print("LED State=");
-    Serial.println(State);
 }
 
-void Led::TurnOn()
+void Led_Control::TurnOn()
 {
     digitalWrite(pin, HIGH);
     State = true;
@@ -44,7 +41,7 @@ void Led::TurnOn()
     BlinkCount = 0;
 }
 
-void Led::TurnOff()
+void Led_Control::TurnOff()
 {
     digitalWrite(pin, LOW);
     State = false;
@@ -53,12 +50,12 @@ void Led::TurnOff()
     BlinkCount = 0;
 }
 
-void Led::Blink(int16_t Count, bool Blocking)
+void Led_Control::Blink(int16_t Count, bool Blocking)
 {
     Blink(Count, BlinkDuty, Blocking);
 }
 
-void Led::Blink(int16_t Count, uint16_t Duty, bool Blocking)
+void Led_Control::Blink(int16_t Count, uint16_t Duty, bool Blocking)
 {
     BlinkDuty = Duty;
 
@@ -90,12 +87,12 @@ void Led::Blink(int16_t Count, uint16_t Duty, bool Blocking)
     }
 }
 
-void Led::Update()
+void Led_Control::Update()
 {
     ProcessAnimation();
 }
 
-void Led::BlockingUpdate()
+void Led_Control::BlockingUpdate()
 {
     while (Animation)
     {
@@ -104,14 +101,23 @@ void Led::BlockingUpdate()
     }
 }
 
-void Led::ProcessAnimation()
+void Led_Control::BlockingUpdate(unsigned long Durationms)
+{
+    unsigned long Timer = millis() + Durationms;
+    while ((Animation) && (millis() < Timer))
+    {
+        ProcessAnimation();
+        delay(1);
+    }
+}
+
+void Led_Control::ProcessAnimation()
 {
     if (!Animation)
     {
         return;
     }
-
-    // Rollover-safe timing
+    
     if ((uint32_t)(millis() - LastAnimation) < BlinkDuty)
     {
         return;

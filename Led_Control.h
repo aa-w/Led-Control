@@ -33,7 +33,7 @@
 #include <Arduino.h>
 #endif
 
-class Led
+class Led_Control
 {
 private:
     byte pin;
@@ -41,19 +41,20 @@ private:
     int16_t BlinkCount;      // -1 = forever
     bool Animation;
     uint32_t LastAnimation;
-    uint32_t LastUpdate;
-    bool State;
     void ProcessAnimation();
 public:
-    Led(); //Constructor
-    void Setup(byte AssignedPin);
-    void Blink(int16_t Count, bool Blocking);
+    Led_Control(); //Constructor
+    bool State;
+    uint32_t LastUpdate;
+    void Setup(byte AssignedPin); //Set up the class and assign a pin
+    void Blink(int16_t Count, bool Blocking); //Blink animation will update when Update is called unless set to block
     void Blink(int16_t Count, uint16_t Duty, bool Blocking);
-    void Toggle();
-    void Update();
-    void BlockingUpdate();
-    void TurnOn();
-    void TurnOff();
+    void Toggle(); //Flip LED state
+    void Update(); //Non-blocking animation update
+    void BlockingUpdate(); //Blocking animation update
+    void BlockingUpdate(unsigned long Durationms); //Blocking animation update with a time limit
+    void TurnOn(); //Turn LED on
+    void TurnOff(); //Turn LED off
 };
 
 #endif // LED

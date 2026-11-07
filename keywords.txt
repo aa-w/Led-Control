@@ -1,6 +1,7 @@
-Setup   KEYWORD1
-Update  KEYWORD1
-Blink   KEYWORD2
-Toggle  KEYWORD2
-TurnOn  KEYWORD2
-TurnOff KEYWORD2
+Led_Control KEYWORD1
+Setup       KEYWORD2
+Update      KEYWORD2
+Blink       KEYWORD2
+Toggle      KEYWORD2
+TurnOn      KEYWORD2
+TurnOff     KEYWORD2
