@@ -7,7 +7,8 @@ Led_Control::Led_Control() : pin(0),
              BlinkCount(0),
              Animation(false),
              LastAnimation(0),
-             LastUpdate(0)
+             LastUpdate(0),
+             AnimationDelay(0)
 {
 }
 
@@ -20,6 +21,7 @@ void Led_Control::Setup(byte AssignedPin)
     State = false;
 
     Animation = false;
+    AnimationDelay = 0;
     BlinkCount = 0;
 }
 
@@ -36,18 +38,28 @@ void Led_Control::TurnOn()
 {
     digitalWrite(pin, HIGH);
     State = true;
-    LastUpdate = millis();
     Animation = false;
     BlinkCount = 0;
+    AnimationDelay = 0;
+    LastUpdate = millis();
 }
 
 void Led_Control::TurnOff()
 {
     digitalWrite(pin, LOW);
     State = false;
-    LastUpdate = millis();
     Animation = false;
     BlinkCount = 0;
+    AnimationDelay = 0;
+    LastUpdate = millis();
+}
+
+void Led_Control::DelayedToggle(uint16_t DurationMs)
+{
+    Animation = true;
+    BlinkCount = 2;
+    AnimationDelay = DurationMs;
+    LastAnimation = millis();
 }
 
 void Led_Control::Blink(int16_t Count, bool Blocking)
@@ -58,6 +70,7 @@ void Led_Control::Blink(int16_t Count, bool Blocking)
 void Led_Control::Blink(int16_t Count, uint16_t Duty, bool Blocking)
 {
     BlinkDuty = Duty;
+    AnimationDelay = 0;
 
     if (Count < 0)
     {
@@ -87,6 +100,36 @@ void Led_Control::Blink(int16_t Count, uint16_t Duty, bool Blocking)
     }
 }
 
+void Led_Control::DelayedBlink(uint16_t DurationMs, int16_t Count, uint16_t Duty, bool Blocking)
+{
+    BlinkDuty = Duty;
+    AnimationDelay = DurationMs;
+    if (Count < 0)
+    {
+        // Blink forever
+        BlinkCount = -1;
+    }
+    else
+    {
+        // ON + OFF transitions
+        BlinkCount = (Count * 2) + 2;
+    }
+
+    Animation = true;
+
+    if (BlinkCount > 0)
+    {
+        BlinkCount--;
+    }
+
+    LastAnimation = millis();
+
+    if (Blocking)
+    {
+        BlockingUpdate();
+    }
+}
+
 void Led_Control::Update()
 {
     ProcessAnimation();
@@ -101,9 +144,9 @@ void Led_Control::BlockingUpdate()
     }
 }
 
-void Led_Control::BlockingUpdate(unsigned long Durationms)
+void Led_Control::BlockingUpdate(uint16_t DurationMs)
 {
-    unsigned long Timer = millis() + Durationms;
+    unsigned long Timer = millis() + DurationMs;
     while ((Animation) && (millis() < Timer))
     {
         ProcessAnimation();
@@ -118,11 +161,12 @@ void Led_Control::ProcessAnimation()
         return;
     }
     
-    if ((uint32_t)(millis() - LastAnimation) < BlinkDuty)
+    if ((uint32_t)(millis() - LastAnimation) < (BlinkDuty + AnimationDelay))
     {
         return;
     }
 
+    AnimationDelay = 0;
     LastAnimation = millis();
 
     Toggle();
@@ -134,7 +178,8 @@ void Led_Control::ProcessAnimation()
 
         if (BlinkCount == 0)
         {
-            TurnOff();
+            Toggle();
+            Animation = false;
         }
     }
 }

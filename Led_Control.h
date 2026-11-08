@@ -37,6 +37,7 @@ class Led_Control
 {
 private:
     byte pin;
+    uint16_t AnimationDelay;
     uint16_t BlinkDuty;
     int16_t BlinkCount;      // -1 = forever
     bool Animation;
@@ -49,10 +50,12 @@ public:
     void Setup(byte AssignedPin); //Set up the class and assign a pin
     void Blink(int16_t Count, bool Blocking); //Blink animation will update when Update is called unless set to block
     void Blink(int16_t Count, uint16_t Duty, bool Blocking);
+    void DelayedBlink(uint16_t DurationMs, int16_t Count, uint16_t Duty, bool Blocking);
     void Toggle(); //Flip LED state
+    void DelayedToggle(uint16_t DurationMs);
     void Update(); //Non-blocking animation update
     void BlockingUpdate(); //Blocking animation update
-    void BlockingUpdate(unsigned long Durationms); //Blocking animation update with a time limit
+    void BlockingUpdate(uint16_t DurationMs); //Blocking animation update with a time limit
     void TurnOn(); //Turn LED on
     void TurnOff(); //Turn LED off
 };
