@@ -1,7 +1,7 @@
 /*!
- *  @file       Led.h
- *  Project     Led-Control Library
- *  @brief      Led Control Library for Arduino
+ *  @file       Pin_Control.h
+ *  Project     Pin_Control Library
+ *  @brief      Pin Control Library for Arduino
  *  @author     aa-w
  *  @date       05/11/2026
  *  @license    MIT - Copyright (c) 2026 aa-w
@@ -25,15 +25,15 @@
  * THE SOFTWARE.
  */
 
-#ifndef LED_H  // Prevent multiple inclusions
-#define LED_H
+#ifndef PIN_H  // Prevent multiple inclusions
+#define PIN_H
 
 #ifndef ARDUINO_H_
 #define ARDUINO_H_
 #include <Arduino.h>
 #endif
 
-class Led_Control
+class Pin_Control
 {
 private:
     byte pin;
@@ -44,20 +44,20 @@ private:
     uint32_t LastAnimation;
     void ProcessAnimation();
 public:
-    Led_Control(); //Constructor
+    Pin_Control(); //Constructor
     bool State;
     uint32_t LastUpdate;
     void Setup(byte AssignedPin); //Set up the class and assign a pin
-    void Blink(int16_t Count, bool Blocking); //Blink animation will update when Update is called unless set to block
+    void Blink(int16_t Count, bool Blocking); //Blink animation will update when Update is calPin unless set to block
     void Blink(int16_t Count, uint16_t Duty, bool Blocking);
     void DelayedBlink(uint16_t DurationMs, int16_t Count, uint16_t Duty, bool Blocking);
-    void Toggle(); //Flip LED state
+    void Toggle(); //Flip Pin state
     void DelayedToggle(uint16_t DurationMs);
     void Update(); //Non-blocking animation update
     void BlockingUpdate(); //Blocking animation update
     void BlockingUpdate(uint16_t DurationMs); //Blocking animation update with a time limit
-    void TurnOn(); //Turn LED on
-    void TurnOff(); //Turn LED off
+    void TurnOn(); //Turn Pin on
+    void TurnOff(); //Turn Pin off
 };
 
-#endif // LED
+#endif // Pin

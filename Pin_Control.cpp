@@ -1,7 +1,7 @@
-#include "Led_Control.h"
+#include "Pin_Control.h"
 
 // Constructor
-Led_Control::Led_Control() : pin(0),
+Pin_Control::Pin_Control() : pin(0),
              State(false),
              BlinkDuty(500),
              BlinkCount(0),
@@ -12,7 +12,7 @@ Led_Control::Led_Control() : pin(0),
 {
 }
 
-void Led_Control::Setup(byte AssignedPin)
+void Pin_Control::Setup(byte AssignedPin)
 {
     pin = AssignedPin;
 
@@ -25,7 +25,7 @@ void Led_Control::Setup(byte AssignedPin)
     BlinkCount = 0;
 }
 
-void Led_Control::Toggle()
+void Pin_Control::Toggle()
 {
     State = !State;
 
@@ -34,7 +34,7 @@ void Led_Control::Toggle()
     LastUpdate = millis();
 }
 
-void Led_Control::TurnOn()
+void Pin_Control::TurnOn()
 {
     digitalWrite(pin, HIGH);
     State = true;
@@ -44,7 +44,7 @@ void Led_Control::TurnOn()
     LastUpdate = millis();
 }
 
-void Led_Control::TurnOff()
+void Pin_Control::TurnOff()
 {
     digitalWrite(pin, LOW);
     State = false;
@@ -54,7 +54,7 @@ void Led_Control::TurnOff()
     LastUpdate = millis();
 }
 
-void Led_Control::DelayedToggle(uint16_t DurationMs)
+void Pin_Control::DelayedToggle(uint16_t DurationMs)
 {
     Animation = true;
     BlinkCount = 2;
@@ -62,12 +62,12 @@ void Led_Control::DelayedToggle(uint16_t DurationMs)
     LastAnimation = millis();
 }
 
-void Led_Control::Blink(int16_t Count, bool Blocking)
+void Pin_Control::Blink(int16_t Count, bool Blocking)
 {
     Blink(Count, BlinkDuty, Blocking);
 }
 
-void Led_Control::Blink(int16_t Count, uint16_t Duty, bool Blocking)
+void Pin_Control::Blink(int16_t Count, uint16_t Duty, bool Blocking)
 {
     BlinkDuty = Duty;
     AnimationDelay = 0;
@@ -100,7 +100,7 @@ void Led_Control::Blink(int16_t Count, uint16_t Duty, bool Blocking)
     }
 }
 
-void Led_Control::DelayedBlink(uint16_t DurationMs, int16_t Count, uint16_t Duty, bool Blocking)
+void Pin_Control::DelayedBlink(uint16_t DurationMs, int16_t Count, uint16_t Duty, bool Blocking)
 {
     BlinkDuty = Duty;
     AnimationDelay = DurationMs;
@@ -130,12 +130,12 @@ void Led_Control::DelayedBlink(uint16_t DurationMs, int16_t Count, uint16_t Duty
     }
 }
 
-void Led_Control::Update()
+void Pin_Control::Update()
 {
     ProcessAnimation();
 }
 
-void Led_Control::BlockingUpdate()
+void Pin_Control::BlockingUpdate()
 {
     while (Animation)
     {
@@ -144,7 +144,7 @@ void Led_Control::BlockingUpdate()
     }
 }
 
-void Led_Control::BlockingUpdate(uint16_t DurationMs)
+void Pin_Control::BlockingUpdate(uint16_t DurationMs)
 {
     unsigned long Timer = millis() + DurationMs;
     while ((Animation) && (millis() < Timer))
@@ -154,7 +154,7 @@ void Led_Control::BlockingUpdate(uint16_t DurationMs)
     }
 }
 
-void Led_Control::ProcessAnimation()
+void Pin_Control::ProcessAnimation()
 {
     if (!Animation)
     {
