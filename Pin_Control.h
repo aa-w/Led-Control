@@ -1,6 +1,6 @@
 /*!
  *  @file       Led.h
- *  Project     Led-Control Libraru
+ *  Project     Led-Control Library
  *  @brief      Led Control Library for Arduino
  *  @author     aa-w
  *  @date       05/11/2026

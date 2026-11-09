@@ -1,6 +1,6 @@
-#include <Led_Control.h>
+#include <Pin_Control.h>
 
-Led_Control LED_BuiltIn;
+Pin_Control LED_BuiltIn;
 
 void setup()
 {
